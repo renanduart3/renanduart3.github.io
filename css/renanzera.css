@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css?family=Bowlby+One+SC|Francois+One');
 .fonte1{font-family: 'Bowlby One SC', cursive;}
-.fonte2{font-family: 'Francois One', sans-serif;
-}
-.topo{height: 400px; background-color:#ccc}
+.fonte2{font-family: 'Francois One', sans-serif; text-shadow: -0.06em 0 #E91E63, 0.06em 0 #18FFFF;}
+.topo{font-size: 0.76rem; background-color:#ccc}
