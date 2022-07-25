@@ -1,9 +1,9 @@
 ---
-title: Setting-up Blog
+title: Primeiro post copia
 author: renanduart3
-date: 2022-06-01 23:00:00 -0500
+date: 2022-01-01 23:00:00 -0500
 categories: [Blogging, Tutorial]
-tags: [blog tutorial, jekyll, giscuss]
+tags: [blog tutorial, jekyll]
 ---
 
 [renan-homepage]
