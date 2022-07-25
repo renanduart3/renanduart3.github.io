@@ -15,15 +15,26 @@ There is a detailed [tutorial](https://developers.google.com/analytics/solutions
 Link com target blank
 [Link do post]({% post_url 2021-01-03-enable-google-pv %}){:target="_blank"}
 
-Referencia a documentacao exposta [^jack2].
+Referencia a documentacao exposta 2 [^jack2].
+Referencia a documentacao exposta 3 [^jack3].
+Referencia a documentacao exposta 4 [^jack4].
+Referencia a documentacao exposta 1 [^jack1].
+
+
 
 
 
 
 ## Reference
 
+[^jack2]: [The C# type system](https://docs.microsoft.com/en-us/dotnet/csharp/fundamentals/types/#built-in-types)
+
+[^jack1]: [new C# 10](https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-10)
+
+[^jack3]: [whats new c# 8](https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-8)
+
+[jack4]: [The C# type system](https://docs.microsoft.com/en-us/dotnet/csharp/fundamentals/types/#built-in-types)
+
 [jackson-post]: https://github.com/cotes2020/jekyll-theme-chirpy/
 
 [renan-homepage]: https://renanduart3.github.io
-
-[^jack2]: [The C# type system](https://docs.microsoft.com/en-us/dotnet/csharp/fundamentals/types/#built-in-types)
