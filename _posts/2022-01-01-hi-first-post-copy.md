@@ -17,7 +17,6 @@ Link com target blank
 
 Referencia a documentacao exposta 2 [^jack2].
 Referencia a documentacao exposta 3 [^jack3].
-Referencia a documentacao exposta 4 [jack4].
 Referencia a documentacao exposta 1 [^jack1].
 
 
@@ -33,7 +32,6 @@ Referencia a documentacao exposta 1 [^jack1].
 
 [^jack3]: [whats new c# 8](https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-8)
 
-[jack4]: [The C# type system](https://docs.microsoft.com/en-us/dotnet/csharp/fundamentals/types/#built-in-types)
 
 [jackson-post]: https://github.com/cotes2020/jekyll-theme-chirpy/
 
