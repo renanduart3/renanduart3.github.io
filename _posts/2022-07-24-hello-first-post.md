@@ -18,6 +18,6 @@ There is a detailed [tutorial](https://developers.google.com/analytics/solutions
 
 ## Reference
 
-[jackson-post]: (https://github.com/cotes2020/jekyll-theme-chirpy/)
+[jackson-post]: https://github.com/cotes2020/jekyll-theme-chirpy/
 
-[renan-homepage]: (https://renanduart3.github.io)
+[renan-homepage]: https://renanduart3.github.io
