@@ -15,9 +15,15 @@ There is a detailed [tutorial](https://developers.google.com/analytics/solutions
 Link com target blank
 [Link do post]({% post_url 2021-01-03-enable-google-pv %}){:target="_blank"}
 
+Referencia a documentacao exposta [^jack2].
+
+
+
 
 ## Reference
 
 [jackson-post]: https://github.com/cotes2020/jekyll-theme-chirpy/
 
 [renan-homepage]: https://renanduart3.github.io
+
+[^jack2]: [The C# type system](https://docs.microsoft.com/en-us/dotnet/csharp/fundamentals/types/#built-in-types)
