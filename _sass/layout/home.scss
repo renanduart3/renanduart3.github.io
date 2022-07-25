@@ -2,6 +2,45 @@
   Style for Homepage
 */
 
+.animado
+ {
+  background-color: #18191f;
+  box-shadow: 1px 1px 5px #0000008f, 1px 1px 5px #86007c96, 1px 1px 5px #00000080, 1px 1px 5px #d4121299, inset 2px 2px 10px #001e8ccf, inset 1px 1px 5px #e8e4e463, inset 2px 3px 5px #ede8e814, inset 2px 3px 6px #ffffff0f;
+  border-radius: 29px;
+  animation: animate 3s linear infinite;
+  text-shadow: 0 0 50px #0072ff, 0 0 100px #0072ff, 0 0 150px #0072ff, 0 0 200px #0072ff;
+}
+
+#facebook {
+  animation-delay: 0.7s;
+}
+
+#rss > i {
+  animation-delay: 0.8s;
+}
+
+#github > i {
+  animation-delay: 0.1s;
+}
+
+#linkedin > i  {
+  animation-delay: 0.3s;
+}
+
+.animado {
+  animation-delay: 0.6s;
+}
+
+@keyframes animate {
+  from {
+    filter: hue-rotate(0deg);
+  }
+
+  to {
+    filter: hue-rotate(360deg);
+  }
+}
+
 .pagination {
   color: var(--btn-patinator-text-color);
   font-family: 'Lato', sans-serif;
@@ -49,9 +88,13 @@
     &:last-child .page-link {
       border-radius: 50%;
     }
-  } // .page-item
+  }
 
-} // .pagination
+  // .page-item
+
+}
+
+// .pagination
 
 #post-list {
   margin-top: 1rem;
@@ -90,7 +133,7 @@
       margin-bottom: 0.6rem;
       color: var(--post-list-text-color);
 
-      > p {
+      >p {
         /* Make preview shorter on the homepage */
         margin: 0;
         overflow: hidden;
@@ -102,19 +145,23 @@
     }
 
     .pin {
-      > i {
+      >i {
         transform: rotate(45deg);
         padding-left: 3px;
         color: var(--pin-color);
       }
 
-      > span {
+      >span {
         display: none;
       }
     }
 
-  } // .post-preview
-} // #post-list
+  }
+
+  // .post-preview
+}
+
+// #post-list
 
 /* Hide SideBar and TOC */
 @media all and (max-width: 830px) {
@@ -146,7 +193,7 @@
         padding-left: 1px;
         padding-right: 6px;
 
-        > span {
+        >span {
           display: inline;
         }
       }
@@ -172,7 +219,9 @@
       display: none;
     }
 
-  } // .pagination
+  }
+
+  // .pagination
 
 }
 

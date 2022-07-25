@@ -21,7 +21,7 @@ timezone: America/Sao_Paulo
 # jekyll-seo-tag settings › https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md
 # ↓ --------------------------
 
-title: Blog do Renan 😎                          # the main title
+title: O tal do MAUI 😎                          # the main title
 
 tagline: Desenvolvedor .NET decobrindo coisas. [C#, VB, TS, JS ]   # it will display as the sub-title
 
