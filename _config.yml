@@ -80,16 +80,16 @@ theme_mode:   # [light|dark]
 # will be added to all image (site avatar & posts' images) paths starting with '/'
 #
 # e.g. 'https://cdn.com'
-img_cdn: 'https://raw.githubusercontent.com/cotes2020/chirpy-images/main'
+img_cdn: 'https://raw.githubusercontent.com/renanduart3/renanduart3.github.io/img/'
 
 # the avatar on sidebar, support local or CORS resources
-avatar: '/commons/avatar.jpg'
+avatar: '/img/avatar.png'
 
 # boolean type, the global switch for ToC in posts.
 toc: true
 
 comments:
-  active:         # The global switch for posts comments, e.g., 'disqus'.  Keep it empty means disable
+  active: giscus        # The global switch for posts comments, e.g., 'disqus'.  Keep it empty means disable
   # The active options are as follows:
   disqus:
     shortname:    # fill with the Disqus shortname. › https://help.disqus.com/en/articles/1717111-what-s-a-shortname
@@ -99,11 +99,11 @@ comments:
     issue_term:   # < url | pathname | title | ...>
   # Giscus options › https://giscus.app
   giscus:
-    repo:             <gh-username>renanduart3/renanduart3.github.io<repo>
-    repo_id:          'MDEwOlJlcG9zaXRvcnk5NDA0NTQ2Mg=='
-    category:         'General'
-    category_id:      'DIC_kwDOBZsFFs4CQYl8'
-    data_theme:       'dark_dimmed'
+    repo:             renanduart3/renanduart3.github.io
+    repo_id:          MDEwOlJlcG9zaXRvcnk5NDA0NTQ2Mg==
+    category:         General
+    category_id:      DIC_kwDOBZsFFs4CQYl8
+    data_theme:       dark_dimmed
     mapping:          # optional, default to 'pathname'
     input_position:   # optional, default to 'bottom'
     lang:             # optional, default to the value of `site.lang`
