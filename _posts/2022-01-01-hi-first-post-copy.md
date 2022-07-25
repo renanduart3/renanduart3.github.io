@@ -17,7 +17,7 @@ Link com target blank
 
 Referencia a documentacao exposta 2 [^jack2].
 Referencia a documentacao exposta 3 [^jack3].
-Referencia a documentacao exposta 4 [^jack4].
+Referencia a documentacao exposta 4 [jack4].
 Referencia a documentacao exposta 1 [^jack1].
 
 
