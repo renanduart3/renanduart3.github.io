@@ -10,10 +10,10 @@ baseurl: ''
 # The language of the webpage › http://www.lingoes.net/en/translator/langcode.htm
 # If it has the same name as one of the files in folder `_data/locales`, the layout language will also be changed,
 # otherwise, the layout language will use the default value of 'en'.
-lang: en
+lang: pt-BR
 
 # Additional parameters for datetime localization, optional. › https://github.com/iamkun/dayjs/tree/dev/src/locale
-prefer_datetime_locale:
+prefer_datetime_locale: pt-br
 
 # Change to your timezone › http://www.timezoneconverter.com/cgi-bin/findzone/findzone
 timezone: America/Sao_Paulo
@@ -21,12 +21,12 @@ timezone: America/Sao_Paulo
 # jekyll-seo-tag settings › https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md
 # ↓ --------------------------
 
-title: Chirpy                          # the main title
+title: Blog do Renan 😎                          # the main title
 
-tagline: A text-focused Jekyll theme   # it will display as the sub-title
+tagline: Desenvolvedor .NET decobrindo coisas. [C#, VB, TS, JS ]   # it will display as the sub-title
 
 description: >-                        # used by seo meta and the atom feed
-  A minimal, responsive, and powerful Jekyll theme for presenting professional writing.
+  Posts relacionados a tecnologias microsoft e desenvolvimento com .NET.
 
 # fill in the protocol & hostname for your site, e.g., 'https://username.github.io'
 url: 'http://renanduart3.github.io/'
@@ -35,7 +35,7 @@ github:
   username: renanduart3             # change to your github username
 
 twitter:
-  username: ""            # change to your twitter username
+#  username: ""            # change to your twitter username
 
 social:
   # Change to your full name.
@@ -44,7 +44,7 @@ social:
   email: r3nan.dev@gmail.com            # change to your email address
   links:
     # The first element serves as the copyright owner's link
-    - https://twitter.com/username      # change to your twitter homepage
+    # - https://twitter.com/username      # change to your twitter homepage
     - https://github.com/renanduart3       # change to your github homepage
     # Uncomment below to add more social links
     # - https://www.facebook.com/username
