@@ -11,8 +11,10 @@ Sempre me interessei muito por informática , me formei em Analise e Desenvolvim
 Optei por adotar o ecossistema .NET como minha principal ferramenta de trabalho, e desde então, tenho me aperfeiçoado.
 {: style="text-align: justify;"}
 
-##Projetos
+## Projetos
+
 > 1. ANGULAR COM O STEPPER CONSUMINDO UMA API REST EM .NET
+  teste
 > 2. EM .NET DE TICKET DE ESTACIONAMENTO MELHORADO
 > 3. PAGAMENTO GATEWAY .NET COM STRIPE E PAYPAL 
 > 4. UNITY C#
