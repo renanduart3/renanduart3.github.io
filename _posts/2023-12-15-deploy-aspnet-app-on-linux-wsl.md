@@ -1,12 +1,10 @@
 ---
 title: Deploy ASP .NET no Linux [WSL]
 author: renanduart3
-date: 2023-12-15 16:00:00 -0500
+date: 2023-12-15 16:00:00
 categories: [Tutorial]
 tags: [tutorial, wsl, linux, dotnet 6, deploy wsl]
 ---
-
-[renan-homepage]
 
 ### 💻 01 Instalar o .NET Core Runtime no Servidor
 
