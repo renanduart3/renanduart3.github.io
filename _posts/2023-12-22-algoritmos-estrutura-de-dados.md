@@ -6,8 +6,6 @@ categories: [Blogging]
 tags: [estrutura-de-dados,c#, algoritmos]
 ---
 
-# Algoritmos e Estruturas de Dados em C#
-
 Neste post, vou mostrar alguns exemplos de algoritmos e estruturas de dados comuns em C#, como arrays, listas, listas ligadas, hashsets, quicksort, tabela hash, fila, pilha, árvore e grafos.
 
 ## Arrays
@@ -452,10 +450,6 @@ PreOrder(root);
 // Percorrer a árvore em ordem
 Console.WriteLine("In-order traversal:");
 InOrder(root);
+```
 
-
-
-
-Origem: conversa com o Bing, 22/12/2023
-(1) Setting a Markdown processor for your GitHub Pages site using Jekyll. https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/setting-a-markdown-processor-for-your-github-pages-site-using-jekyll.
-(2) GitHub Pages | Jekyll • Simple, blog-aware, static sites. https://jekyllrb.com/docs/github-pages/.
+> em construção
