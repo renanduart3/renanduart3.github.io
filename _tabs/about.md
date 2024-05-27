@@ -13,12 +13,4 @@ Optei por adotar o ecossistema .NET como minha principal ferramenta de trabalho,
 
 ## Projetos
 
-> 1. ANGULAR COM O STEPPER CONSUMINDO UMA API REST EM .NET
-  teste
-> 2. EM .NET DE TICKET DE ESTACIONAMENTO MELHORADO
-> 3. PAGAMENTO GATEWAY .NET COM STRIPE E PAYPAL 
-> 4. UNITY C#
-> 5. XAMARIN (MAUI)
-> 6. ARQUITETURAL COM MENSAGERIA E  DOCKERIZADO
-
-![image](https://user-images.githubusercontent.com/13355599/182938576-6d15f0b7-2125-468b-80ce-99b1577785f4.png)
+> 1. PROJETO **[REACT]** GERADOR JOGO MEGA SENA => **[MEGA-POWAR](https://renanduart3.github.io/mega-powar/)**.
