@@ -3,8 +3,8 @@ name: Deploy Astro to GitHub Pages
 on:
   push:
     branches:
-      - master
-      - main
+      - master-a
+
   workflow_dispatch:
 
 permissions:
