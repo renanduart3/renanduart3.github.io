@@ -1,0 +1,106 @@
+---
+import { siteConfig } from '@/config';
+import Icon from './Icon.astro';
+
+export interface Props {
+  categories: string[];
+  currentCategory?: string;
+  showCount?: boolean;
+  variant?: 'default' | 'outline' | 'minimal';
+}
+
+const { categories, currentCategory, showCount = false, variant = 'default' } = Astro.props;
+
+// Sort categories alphabetically
+const sortedCategories = [...categories].sort();
+---
+
+{siteConfig.postOptions.tags && sortedCategories.length > 0 && (
+  <div class="categories-container p-4 bg-white dark:bg-primary-900 rounded-xl border border-primary-200 dark:border-primary-700 shadow-lg backdrop-blur-sm bg-opacity-95 dark:bg-opacity-95">
+    <h3 class="font-semibold text-primary-900 dark:text-primary-50 mb-3 flex items-center text-sm">
+      <Icon name="folder-open" class="w-4 h-4 mr-2" />
+      Categories
+    </h3>
+
+    <div class="flex flex-wrap gap-2">
+      {sortedCategories.map(category => (
+        <button
+          data-category={category}
+          class={`category-item inline-flex items-center px-3 py-1.5 rounded-md text-sm font-medium transition-all duration-200 cursor-pointer ${
+            currentCategory === category
+              ? 'bg-highlight-100 dark:bg-highlight-900/40 text-highlight-800 dark:text-highlight-200 ring-1 ring-highlight-300 dark:ring-highlight-700'
+              : 'bg-primary-100 dark:bg-primary-800 text-primary-700 dark:text-primary-300 hover:bg-primary-200 dark:hover:bg-primary-700 hover:text-primary-800 dark:hover:text-primary-200'
+          }`}
+        >
+          <span class="category-text">{category}</span>
+          {showCount && (
+            <span class="category-count">
+              {/* This would be populated by JavaScript */}
+            </span>
+          )}
+        </button>
+      ))}
+    </div>
+  </div>
+)}
+
+<style>
+  .category-item {
+    @apply inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-full transition-all duration-200;
+  }
+
+  .category-default {
+    @apply bg-primary-100 dark:bg-primary-800 text-primary-800 dark:text-primary-200 hover:bg-primary-200 dark:hover:bg-primary-700 hover:text-primary-900 dark:hover:text-primary-100;
+  }
+
+  .category-outline {
+    @apply border border-primary-300 dark:border-primary-600 text-primary-600 dark:text-primary-300 hover:border-highlight-500 hover:text-highlight-600 dark:hover:text-highlight-400 hover:bg-highlight-50 dark:hover:bg-highlight-900/20;
+  }
+
+  .category-minimal {
+    @apply text-primary-600 dark:text-primary-300 hover:text-highlight-600 dark:hover:text-highlight-400 hover:bg-primary-100 dark:hover:bg-primary-800;
+  }
+
+  .category-active {
+    @apply bg-highlight-600 text-white shadow-lg;
+  }
+
+  .category-active:hover {
+    @apply bg-highlight-700;
+  }
+
+  .category-count {
+    @apply text-xs opacity-75 bg-white/20 px-1.5 py-0.5 rounded-full;
+  }
+
+  .category-item:hover {
+    @apply transform scale-105 shadow-md;
+  }
+
+  /* Active category hover state - keep active colors, just add grow effect */
+  .category-item.bg-highlight-100:hover {
+    @apply transform scale-105 shadow-md;
+    /* Keep the active background and text colors - don't override them */
+  }
+  
+  .category-item.dark\:bg-highlight-900\/40:hover {
+    @apply transform scale-105 shadow-md;
+    /* Keep the active background and text colors - don't override them */
+  }
+
+  .category-text {
+    @apply truncate max-w-32;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 640px) {
+    .category-item {
+      @apply text-xs px-2 py-1;
+    }
+
+    .category-text {
+      @apply max-w-24;
+    }
+  }
+</style>
+

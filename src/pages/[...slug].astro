@@ -1,0 +1,72 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getCollection } from 'astro:content';
+import { siteConfig } from '@/config';
+import PageLayout from '@/layouts/PageLayout.astro';
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  // Get all pages
+  const pages = await getCollection('pages');
+  
+  // Get all special pages
+  const specialPages = await getCollection('special');
+
+  // Filter out special pages that are handled by dedicated routes
+  // Note: 'projects' and 'docs' are NOT filtered out here because they can be fallback pages
+  const specialPageSlugs = ['home', '404'];
+  const visiblePages = pages.filter(page => !specialPageSlugs.includes(page.slug));
+
+  // Generate paths for regular pages
+  const pagePaths = visiblePages.map(page => ({
+    params: { slug: page.slug },
+    props: { page }
+  }));
+
+  // Generate paths for special pages (excluding home and 404 which have special handling)
+  // Special pages serve as fallback content when features are disabled
+  const specialPaths = specialPages
+    .filter(page => {
+      // Always exclude home and 404
+      if (['home', '404'].includes(page.slug)) {
+        return false;
+      }
+      
+      // For projects and docs: only include if their features are disabled
+      // When features are enabled, the dedicated routes handle these paths
+      if (page.slug === 'projects') {
+        return !siteConfig.optionalContentTypes.projects;
+      }
+      
+      if (page.slug === 'docs') {
+        return !siteConfig.optionalContentTypes.docs;
+      }
+      
+      return true;
+    })
+    .map(page => ({
+      params: { slug: page.slug },
+      props: { page }
+    }));
+
+  return [...pagePaths, ...specialPaths];
+};
+
+export interface Props {
+  page: any;
+}
+
+const { page } = Astro.props;
+
+// Validate page data
+if (!page) {
+  return Astro.redirect('/404');
+}
+
+// Check if page is draft (only in production)
+const isDev = import.meta.env.DEV;
+if (!isDev && page.data.draft) {
+  return Astro.redirect('/404');
+}
+---
+
+<PageLayout page={page} />

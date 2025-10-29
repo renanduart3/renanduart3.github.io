@@ -1,0 +1,78 @@
+---
+import { siteConfig } from '@/config';
+
+// Only render if comments are enabled
+if (!siteConfig.postOptions.comments.enabled) {
+  return null;
+}
+
+const { comments } = siteConfig.postOptions;
+
+---
+
+<div class="giscus-comments-container">
+  <div 
+    id="giscus-comments" 
+    class="giscus-comments-widget"
+    data-repo={comments.repo}
+    data-repo-id={comments.repoId}
+    data-category={comments.category}
+    data-category-id={comments.categoryId}
+    data-mapping={comments.mapping}
+    data-strict={comments.strict}
+    data-reactions-enabled={comments.reactions}
+    data-emit-metadata={comments.metadata}
+    data-input-position={comments.inputPosition}
+    data-theme={comments.theme}
+    data-lang={comments.lang}
+    data-loading={comments.loading}
+  ></div>
+</div>
+
+<!-- Comments are now handled by BaseLayout -->
+
+<style>
+  .giscus-comments-container {
+    margin-top: 2rem;
+  }
+
+  .giscus-comments-widget {
+    min-height: 200px;
+    border: none !important;
+    background: transparent !important;
+  }
+
+  .giscus-comments-widget:empty::before {
+    content: "";
+    display: none;
+  }
+
+  .giscus-comments-widget[data-error]::before {
+    content: "Unable to load comments. Please check your Giscus configuration.";
+    display: block;
+    text-align: center;
+    color: var(--color-primary-400);
+    font-style: italic;
+    padding: 2rem;
+    border: 1px dashed var(--color-primary-300);
+    border-radius: 0.5rem;
+  }
+
+  /* Giscus theme integration */
+  :global(.giscus) {
+    border: none !important;
+    background: transparent !important;
+  }
+
+  :global(.giscus-frame) {
+    border: none !important;
+    background: transparent !important;
+  }
+
+  /* Remove any default borders or backgrounds */
+  :global(.giscus-comments-widget) {
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+</style>

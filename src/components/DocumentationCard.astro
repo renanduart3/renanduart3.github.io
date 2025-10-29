@@ -1,0 +1,162 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { formatDate, processMarkdown, isValidDate } from '../utils/markdown';
+import { siteConfig } from '../config';
+import ImageWrapper from './ImageWrapper.astro';
+import Icon from './Icon.astro';
+
+interface Props {
+  documentation: CollectionEntry<'docs'>;
+  featured?: boolean;
+  eager?: boolean;
+  context?: 'featured' | 'recent' | 'docs' | 'tags' | 'home';
+}
+
+const { documentation, featured = false, eager = false, context = 'docs' } = Astro.props;
+
+// Get excerpt from markdown processing
+const { excerpt } = processMarkdown(documentation.body);
+
+const title = documentation.data.title;
+const description = documentation.data.description || excerpt;
+const lastModified = documentation.data.lastModified;
+const image = documentation.data.image;
+const imageAlt = documentation.data.imageAlt || `Cover image for ${title}`;
+const category = documentation.data.category;
+const version = documentation.data.version;
+
+// Process image field to handle both string and array formats
+const processedImage = (() => {
+  if (!image) return image;
+  
+  // Handle case where image is an array (unquoted YAML syntax)
+  let imageValue = image;
+  if (Array.isArray(image)) {
+    // If it's an array, take the first element
+    imageValue = image[0];
+  }
+  
+  // Ensure imageValue is a string before calling string methods
+  if (typeof imageValue !== 'string') {
+    console.warn('DocumentationCard: imageValue is not a string:', imageValue);
+    return imageValue;
+  }
+  
+  // Check if it's Obsidian double bracket syntax
+  if (imageValue.startsWith('[[') && imageValue.endsWith(']]')) {
+    // Extract the content inside the double brackets
+    imageValue = imageValue.slice(2, -2);
+  }
+  
+  // For folder-based docs, handle different image locations
+  const isFolderBasedDoc = documentation.id.includes('/') && documentation.id.endsWith('/index.md');
+  if (isFolderBasedDoc) {
+    // If image is in subfolder (images/ or attachments/), remove the prefix
+    if (imageValue.startsWith('images/') || imageValue.startsWith('attachments/')) {
+      return imageValue.replace(/^(images|attachments)\//, '');
+    }
+    // If image is co-located (like cover.png), return as-is
+    return imageValue;
+  }
+  
+  // For regular docs with images in attachments subfolder, remove the attachments/ prefix
+  if (!isFolderBasedDoc && (imageValue.startsWith('attachments/'))) {
+    return imageValue.replace('attachments/', '');
+  }
+  
+  return imageValue;
+})();
+
+// Determine if we should show the cover image
+// Documentation should always show images when available (not controlled by postOptions)
+const shouldShowCoverImage = true;
+
+// Hide images for docs on homepage for cleaner look
+const showCoverImage = shouldShowCoverImage && processedImage && context !== 'home';
+---
+
+<div class="group relative bg-white dark:bg-primary-800 rounded-lg border border-primary-200 dark:border-primary-700 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+  <a href={`/docs/${documentation.slug}`} class="block" aria-label={`View documentation: ${title}`}>
+    <!-- Header with icon and version -->
+    <div class="flex items-center justify-between p-4 pb-2">
+      <Icon name="book-text" class="w-4 h-4 text-primary-500 dark:text-primary-400" />
+      {version && (
+        <span class="text-xs text-primary-500 dark:text-primary-400 font-mono bg-primary-100 dark:bg-primary-700 px-2 py-1 rounded">
+          v{version}
+        </span>
+      )}
+    </div>
+
+    <!-- Cover Image (if exists) -->
+    {showCoverImage && (
+      <div class="px-4 pb-2">
+        <div class="relative overflow-hidden rounded-md">
+          <ImageWrapper
+            src={processedImage}
+            basePath={(() => {
+              // 1. External URLs - no basePath needed
+              if (typeof processedImage === 'string' && processedImage.startsWith('http')) {
+                return '';
+              }
+              
+              // 2. Check if this is a folder-based doc by looking at the file path
+              // Folder-based docs have their content in a subdirectory with index.md
+              const isFolderBasedDoc = documentation.id.includes('/') && documentation.id.endsWith('/index.md');
+              
+              if (isFolderBasedDoc) {
+                // Remove Obsidian brackets to get the actual image path
+                let cleanImagePath = processedImage;
+                if (typeof cleanImagePath === 'string' && cleanImagePath.startsWith('[[') && cleanImagePath.endsWith(']]')) {
+                  cleanImagePath = cleanImagePath.slice(2, -2);
+                }
+                
+                // For folder-based docs, check if image is in images/ or attachments/ subfolder
+                if (typeof cleanImagePath === 'string' && (cleanImagePath.startsWith('images/') || cleanImagePath.startsWith('attachments/'))) {
+                  // Sync script copies images to the root folder, so no subfolder in the URL
+                  return `/docs/${documentation.slug}/`;
+                }
+                // Image in same folder as index.md
+                return `/docs/${documentation.slug}/`;
+              }
+              
+              // 3. Regular docs - use global attachments directory
+              return "/docs/attachments/";
+            })()}
+            alt={imageAlt}
+            width={400}
+            height={200}
+            loading={eager ? 'eager' : 'lazy'}
+            fetchpriority={eager ? 'high' : 'auto'}
+            class="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-300"
+          />
+        </div>
+      </div>
+    )}
+
+    <!-- Content -->
+    <div class="p-4 pt-2">
+      <!-- Title -->
+      <h3 class="text-lg font-semibold text-primary-900 dark:text-primary-50 mb-2 group-hover:text-highlight-600 dark:group-hover:text-highlight-400 transition-colors line-clamp-2">
+        {title}
+      </h3>
+
+      <!-- Description -->
+      {description && (
+        <p class="text-sm text-primary-600 dark:text-primary-300 mb-3 line-clamp-3">
+          {description}
+        </p>
+      )}
+
+      <!-- Footer -->
+      {lastModified && (
+        <div class="pt-2 border-t border-primary-200 dark:border-primary-700">
+          {isValidDate(lastModified) && (
+            <time datetime={lastModified.toISOString()} class="text-xs text-primary-500 dark:text-primary-400">
+              Updated {lastModified.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+            </time>
+          )}
+        </div>
+      )}
+    </div>
+  </a>
+</div>

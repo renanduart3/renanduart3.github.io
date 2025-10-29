@@ -1,0 +1,212 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { formatDate, processMarkdown, isValidDate } from '../utils/markdown';
+import { siteConfig, getPostCardAspectRatio } from '../config';
+import { normalizeStatus, getStatusDisplayText, hasStatusStyling, getStatusClasses } from '../utils/status';
+import { optimizeContentImagePath } from '../utils/images';
+import ImageWrapper from './ImageWrapper.astro';
+import Icon from './Icon.astro';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  featured?: boolean;
+  eager?: boolean;
+  context?: 'featured' | 'recent' | 'projects' | 'tags' | 'home';
+  showCategories?: boolean;
+}
+
+const { project, featured = false, eager = false, context = 'projects', showCategories = true } = Astro.props;
+
+// Get excerpt from markdown processing
+const { excerpt } = processMarkdown(project.body);
+
+const title = project.data.title;
+const description = project.data.description || excerpt;
+const date = project.data.date;
+const image = project.data.image;
+const imageAlt = project.data.imageAlt || `Cover image for ${title}`;
+const categories = project.data.categories || [];
+const status = normalizeStatus(project.data.status);
+const repositoryUrl = project.data.repositoryUrl;
+const projectUrl = project.data.projectUrl;
+
+// Process image field to handle both string and array formats
+const processedImage = (() => {
+  if (!image) return image;
+  
+  // Handle case where image is an array (unquoted YAML syntax)
+  let imageValue = image;
+  if (Array.isArray(image)) {
+    // If it's an array, take the first element
+    imageValue = image[0];
+  }
+  
+  // Ensure imageValue is a string before calling string methods
+  if (typeof imageValue !== 'string') {
+    console.warn('ProjectCard: imageValue is not a string:', imageValue);
+    return imageValue;
+  }
+  
+  // Check if it's Obsidian double bracket syntax
+  if (imageValue.startsWith('[[') && imageValue.endsWith(']]')) {
+    // Extract the content inside the double brackets
+    imageValue = imageValue.slice(2, -2);
+  }
+  
+  // For folder-based projects, handle different image locations
+  const isFolderBasedProject = project.id.includes('/') && project.id.endsWith('/index.md');
+  if (isFolderBasedProject) {
+    // If image is in subfolder (images/ or attachments/), remove the prefix
+    if (imageValue.startsWith('images/') || imageValue.startsWith('attachments/')) {
+      return imageValue.replace(/^(images|attachments)\//, '');
+    }
+    // If image is co-located (like cover.png), return as-is
+    return imageValue;
+  }
+  
+  // For regular projects with images in attachments subfolder, remove the attachments/ prefix
+  if (!isFolderBasedProject && (imageValue.startsWith('attachments/'))) {
+    return imageValue.replace('attachments/', '');
+  }
+  
+  return imageValue;
+})();
+
+// Get aspect ratio for cover image
+const aspectRatio = getPostCardAspectRatio();
+
+// Determine if we should show the cover image
+// Projects should always show images when available (not controlled by postOptions)
+const shouldShowCoverImage = true;
+
+const showCoverImage = shouldShowCoverImage && processedImage;
+---
+
+<div class="group relative bg-white dark:bg-primary-800 rounded-xl border border-primary-200 dark:border-primary-700 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 aspect-[4/3]" data-project-categories={categories.join(',')}>
+  <a href={`/projects/${project.slug}`} class="block h-full" aria-label={`View project: ${title}`}>
+    <!-- Background Image or Fallback -->
+    {showCoverImage ? (
+      <div class="absolute inset-0">
+        <ImageWrapper
+          src={processedImage}
+          basePath={(() => {
+            // 1. External URLs - no basePath needed
+            if (typeof processedImage === 'string' && processedImage.startsWith('http')) {
+              return '';
+            }
+            
+            // 2. Check if this is a folder-based project by looking at the file path
+            // Folder-based projects have their content in a subdirectory with index.md
+            const isFolderBasedProject = project.id.includes('/') && project.id.endsWith('/index.md');
+            
+            if (isFolderBasedProject) {
+              // Remove Obsidian brackets to get the actual image path
+              let cleanImagePath = processedImage;
+              if (typeof cleanImagePath === 'string' && cleanImagePath.startsWith('[[') && cleanImagePath.endsWith(']]')) {
+                cleanImagePath = cleanImagePath.slice(2, -2);
+              }
+              
+              // For folder-based projects, check if image is in images/ or attachments/ subfolder
+              if (typeof cleanImagePath === 'string' && (cleanImagePath.startsWith('images/') || cleanImagePath.startsWith('attachments/'))) {
+                // Sync script copies images to the root folder, so no subfolder in the URL
+                return `/projects/${project.slug}/`;
+              }
+              // Image in same folder as index.md
+              return `/projects/${project.slug}/`;
+            }
+            
+            // 3. Regular projects - use global attachments directory
+            return "/projects/attachments/";
+          })()}
+          alt={imageAlt}
+          width={800}
+          height={600}
+          loading={eager ? 'eager' : 'lazy'}
+          fetchpriority={eager ? 'high' : 'auto'}
+          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+        />
+        <!-- Dark overlay for better text readability -->
+        <div class="absolute inset-0 bg-black/70 group-hover:bg-black/80 transition-colors duration-300"></div>
+      </div>
+    ) : (
+      <!-- Fallback background when no image -->
+      <div class="absolute inset-0 bg-gradient-to-br from-primary-200 to-primary-300 dark:from-primary-700 dark:to-primary-800"></div>
+    )}
+
+    <!-- Status badge -->
+    {status && (
+      <div class="absolute top-3 right-3 z-10">
+        <span class={`px-2 py-1 rounded-full text-xs font-medium shadow-sm ${getStatusClasses(status)}`}>
+          {getStatusDisplayText(status)}
+        </span>
+      </div>
+    )}
+
+    <!-- Date -->
+    {isValidDate(date) && (
+      <div class="absolute top-3 left-3 z-10">
+        <time datetime={date.toISOString()} class={`text-xs font-mono px-2 py-1 rounded backdrop-blur-sm ${
+          showCoverImage 
+            ? 'text-white/90 bg-black/20' 
+            : 'text-primary-700 dark:text-primary-200 bg-white/80 dark:bg-black/20'
+        }`}>
+          {formatDate(date)}
+        </time>
+      </div>
+    )}
+
+    <!-- Content Overlay -->
+    <div class="absolute inset-0 flex flex-col p-6 z-10" style="padding-top: 4rem;">
+      <!-- Spacer to push content down from top elements -->
+      <div class="flex-1"></div>
+      
+      <!-- Title -->
+      <h3 class={`text-xl font-bold mb-2 transition-colors line-clamp-2 text-center ${
+        showCoverImage 
+          ? 'text-white group-hover:text-highlight-300 drop-shadow-lg' 
+          : 'text-primary-900 dark:text-primary-50 group-hover:text-highlight-600 dark:group-hover:text-highlight-400'
+      }`}>
+        {title}
+      </h3>
+
+      <!-- Hover content -->
+      <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <!-- Description -->
+        {description && (
+          <p class={`text-sm mb-3 line-clamp-2 text-left ${
+            showCoverImage 
+              ? 'text-white/90 drop-shadow-lg' 
+              : 'text-primary-700 dark:text-primary-300'
+          }`}>
+            {description}
+          </p>
+        )}
+
+        <!-- Categories -->
+        {showCategories && categories.length > 0 && (
+          <div class="flex flex-wrap gap-1 mb-3 justify-center">
+            {categories.slice(0, 3).map(category => (
+              <span class={`inline-flex items-center px-2 py-1 text-xs font-medium rounded backdrop-blur-sm ${
+                showCoverImage 
+                  ? 'bg-white/20 text-white/90' 
+                  : 'bg-primary-100 dark:bg-primary-700 text-primary-700 dark:text-primary-200'
+              }`}>
+                {category}
+              </span>
+            ))}
+            {categories.length > 3 && (
+              <span class={`inline-flex items-center px-2 py-1 text-xs font-medium rounded backdrop-blur-sm ${
+                showCoverImage 
+                  ? 'bg-white/20 text-white/90' 
+                  : 'bg-primary-100 dark:bg-primary-700 text-primary-700 dark:text-primary-200'
+              }`}>
+                +{categories.length - 3} more
+              </span>
+            )}
+          </div>
+        )}
+
+      </div>
+    </div>
+  </a>
+</div>

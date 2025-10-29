@@ -1,0 +1,93 @@
+{
+  "nodes": [
+    {
+      "id": "astro-suite-obsidian-vault-guide-astro-modular",
+      "type": "post",
+      "title": "Astro Suite Obsidian Vault Guide (Astro Modular)",
+      "slug": "astro-suite-obsidian-vault-guide-astro-modular",
+      "date": "2025-09-10T00:00:00.000Z",
+      "connections": 1
+    },
+    {
+      "id": "formatting-reference",
+      "type": "post",
+      "title": "Formatting Reference",
+      "slug": "formatting-reference",
+      "date": "2025-09-08T00:00:00.000Z",
+      "connections": 8
+    },
+    {
+      "id": "getting-started",
+      "type": "post",
+      "title": "Getting Started",
+      "slug": "getting-started",
+      "date": "2025-09-06T00:00:00.000Z",
+      "connections": 3
+    },
+    {
+      "id": "mermaid-diagram-test",
+      "type": "post",
+      "title": "Mermaid Diagram Test",
+      "slug": "mermaid-diagram-test",
+      "date": "2025-09-07T00:00:00.000Z",
+      "connections": 0
+    },
+    {
+      "id": "sample-folder-based-post",
+      "type": "post",
+      "title": "Sample Folder-Based Post",
+      "slug": "sample-folder-based-post",
+      "date": "2025-09-09T00:00:00.000Z",
+      "connections": 0
+    }
+  ],
+  "connections": [
+    {
+      "source": "formatting-reference",
+      "target": "getting-started",
+      "type": "link"
+    },
+    {
+      "source": "formatting-reference",
+      "target": "getting-started",
+      "type": "link"
+    },
+    {
+      "source": "formatting-reference",
+      "target": "sample-folder-based-post",
+      "type": "link"
+    },
+    {
+      "source": "formatting-reference",
+      "target": "astro-suite-obsidian-vault-guide-astro-modular",
+      "type": "link"
+    },
+    {
+      "source": "formatting-reference",
+      "target": "mermaid-diagram-test",
+      "type": "link"
+    },
+    {
+      "source": "getting-started",
+      "target": "formatting-reference",
+      "type": "link"
+    },
+    {
+      "source": "getting-started",
+      "target": "formatting-reference",
+      "type": "link"
+    },
+    {
+      "source": "getting-started",
+      "target": "formatting-reference",
+      "type": "link"
+    }
+  ],
+  "metadata": {
+    "generated": "2025-10-29T01:52:40.329Z",
+    "totalPosts": 5,
+    "totalConnections": 8,
+    "maxNodesApplied": false,
+    "originalNodeCount": 5
+  }
+}

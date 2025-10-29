@@ -1,0 +1,8 @@
+{
+  "cssTheme": "Minimal",
+  "showViewHeader": true,
+  "showRibbon": false,
+  "enabledCssSnippets": [
+    "astro-modular-styling"
+  ]
+}

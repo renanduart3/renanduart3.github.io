@@ -1,0 +1,27 @@
+---
+import ImageWrapper from './ImageWrapper.astro';
+
+interface Props {
+  src: string;
+  alt?: string;
+  title?: string;
+  class?: string;
+}
+
+const { src, alt = '', title, class: className } = Astro.props;
+
+// Extract caption from title attribute or data-caption
+const caption = title || Astro.props['data-caption'] || '';
+---
+
+<ImageWrapper
+  src={src}
+  alt={alt}
+  caption={caption}
+  class={className}
+  width={800}
+  height={450}
+  format="webp"
+  quality={85}
+  loading="lazy"
+/>
