@@ -9,7 +9,7 @@ imageOG: false
 hideCoverImage: false
 hideTOC: false
 targetKeyword: "new post"
-draft: true
+draft: false
 ---
 
 ## NOVO POST
