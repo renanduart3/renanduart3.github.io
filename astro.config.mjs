@@ -19,7 +19,7 @@ import swup from '@swup/astro';
 
 // Deployment platform configuration
 // Prefer explicit env var, otherwise read from siteConfig, finally default to netlify
-const DEPLOYMENT_PLATFORM = process.env.DEPLOYMENT_PLATFORM || siteConfig.deployment.platform || 'netlify';
+const DEPLOYMENT_PLATFORM = process.env.DEPLOYMENT_PLATFORM || siteConfig.deployment.platform || 'github-pages';
 
 export default defineConfig({
   site: siteConfig.site,
@@ -149,8 +149,7 @@ export default defineConfig({
     },
     optimizeDeps: {
       exclude: ['astro:content']
-    },
-    exclude: ['**/_redirects', '**/_headers']
+    }
   },
   build: {
     assets: '_assets'

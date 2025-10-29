@@ -13,11 +13,20 @@ function getDeploymentPlatform() {
     const configPath = join(process.cwd(), 'src', 'config.ts');
     const configContent = readFileSync(configPath, 'utf8');
     
-    // Extract platform from config
-    const platformMatch = configContent.match(/platform:\s*["']([^"']+)["']/);
+    // Extract platform from deployment section in config
+    // Look for the actual config value, not comments
+    // Match: deployment: { ... platform: "github-pages", ... }
+    const deploymentMatch = configContent.match(/deployment:\s*\{[^}]*\n\s*\/\/[^\n]*\n\s*platform:\s*["']([^"']+)["']/s);
     
-    if (platformMatch) {
-      return platformMatch[1];
+    if (deploymentMatch) {
+      return deploymentMatch[1];
+    }
+    
+    // Fallback to simpler pattern if comment pattern doesn't match
+    const simpleMatch = configContent.match(/platform:\s*["'](github-pages|netlify|vercel)["'],\s*\/\//);
+    
+    if (simpleMatch) {
+      return simpleMatch[1];
     }
     
     // Fallback to environment variable

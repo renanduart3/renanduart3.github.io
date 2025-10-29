@@ -442,46 +442,15 @@ async function writeVercelConfig(redirects) {
 }
 
 async function writeGitHubPagesConfig(redirects) {
-  const projectRoot = path.join(__dirname, '..');
-  const redirectsPath = path.join(projectRoot, 'public', '_redirects');
-  const headersPath = path.join(projectRoot, 'public', '_headers');
+  // GitHub Pages files are now generated AFTER the build completes
+  // This prevents Vite from trying to parse them as JavaScript files
+  // See: scripts/post-build-github-pages.js
   
-  if (DRY_RUN) {
-    log.info('📝 [DRY RUN] Would generate public/_redirects:');
-    console.log(generateGitHubPagesConfig(redirects));
-    return;
-  }
+  log.info(`ℹ️  GitHub Pages redirects will be generated after build completes`);
+  log.info(`ℹ️  See scripts/post-build-github-pages.js for post-build generation`);
   
-  try {
-    // Write redirects file
-    const config = generateGitHubPagesConfig(redirects);
-    await fs.writeFile(redirectsPath, config, 'utf-8');
-    log.info(`📝 Updated public/_redirects with ${redirects.length} redirects`);
-    
-    // Note: _headers file generation disabled because:
-    // 1. Free GitHub Pages doesn't support custom headers
-    // 2. Vite tries to parse it as JavaScript causing build errors
-    // 3. If you have paid GitHub Pages, manually create public/_headers
-    
-    // // Write headers file (for paid GitHub Pages plans)
-    // const headersContent = `# GitHub Pages Custom Headers
-    // # Note: Custom headers require GitHub Pages on a paid plan or GitHub Enterprise
-    // # For free GitHub Pages, these headers won't be applied
-    // 
-    // # PDF files - allow iframe embedding
-    // /*.pdf
-    //   X-Frame-Options: SAMEORIGIN
-    //   Cache-Control: public, max-age=3600
-    // 
-    // # All pages - Content Security Policy for Twitter widgets
-    // /*
-    //   Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://giscus.app https://platform.twitter.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https://giscus.app; frame-src 'self' https://www.youtube.com https://giscus.app https://platform.twitter.com; object-src 'none'; base-uri 'self';
-    // `;
-    // await fs.writeFile(headersPath, headersContent, 'utf-8');
-    // log.info(`📝 Created public/_headers for GitHub Pages (requires paid plan)`);
-  } catch (error) {
-    log.error(`❌ Error updating GitHub Pages config:`, error.message);
-  }
+  // Note: We still update astro.config.mjs with redirects for Astro's internal routing
+  return;
 }
 
 async function writeNetlifyConfig(redirects) {
