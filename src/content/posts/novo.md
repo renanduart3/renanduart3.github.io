@@ -1,6 +1,6 @@
 ---
 title: "Novo post"
-date: 29-10-2025
+date: 2025-10-29
 description: "Como fazer um novo post"
 tags: ["teste","novo"]
 image: ""
