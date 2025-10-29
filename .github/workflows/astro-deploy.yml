@@ -1,11 +1,10 @@
-name: Deploy to GitHub Pages
+name: (disabled) Deploy to GitHub Pages
 
 on:
-  # Trigger the workflow every time you push to the `main` branch
-  # Using a different branch name? Replace `main` with your branch’s name
+  # Disabled push trigger to avoid conflicts with PNPM-based workflow
   push:
-    branches: [ main ]
-  # Allows you to run this workflow manually from the Actions tab on GitHub.
+    branches: [ __disabled__ ]
+  # Keep manual run just in case
   workflow_dispatch:
 
 # Allow this job to clone the repo and create a page deployment
