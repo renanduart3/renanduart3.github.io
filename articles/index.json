@@ -1,0 +1,25 @@
+[
+  {
+    "id": "art-1",
+    "file": "article1.md",
+    "slug": "article1",
+    "title": "Como reduzir custos em nuvem",
+    "title_en": "How to reduce cloud costs",
+    "description": "Dicas práticas para otimizar custos em ambientes cloud.",
+    "description_en": "Practical tips to optimize costs in cloud environments.",
+    "date": "2025-05-05T15:30:00",
+    "author": "Renan Duarte",
+    "type": "internal",
+    "img": "/articles/article1.jpg",
+    "content_en": "## How to reduce cloud costs\n\nStart by right-sizing instances..."
+  },
+  {
+    "id": "art-ext-1",
+    "title": "Test external article",
+    "date": "2025-05-01T10:10:00",
+    "author": "Renan Duarte",
+    "type": "external",
+    "img": "/articles/external.jpg",
+    "url": "https://www.example.com/article2"
+  }
+]
