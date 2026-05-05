@@ -2,11 +2,27 @@
   {
     "id": "proj-1",
     "file": "projeto1.md",
+    "slug": "projeto1",
     "title": "Portal de Vendas",
     "title_en": "Sales Portal",
     "description": "Sistema de ecommerce para gestão de pedidos, pagamentos e integração com ERPs.",
     "description_en": "E-commerce platform for order management, payments and ERP integrations.",
     "tech": ["C#", "React", "Azure"],
-    "image": "/projects/portal.jpg"
+    "image": "/projects/portal.jpg",
+    "type": "internal",
+    "link": "https://github.com/renanduart3/sales-portal"
+  },
+  {
+    "id": "proj-ext-1",
+    "slug": "external-project",
+    "title": "Exemplo de Projeto Externo",
+    "title_en": "External Project Example",
+    "description": "Projeto hospedado em repositório externo ou site com demo ao vivo.",
+    "description_en": "Project hosted in external repository or website with live demo.",
+    "tech": ["Node.js", "React", "AWS"],
+    "image": "/projects/external.jpg",
+    "type": "external",
+    "link": "https://github.com/exemplo/projeto",
+    "github": "https://github.com/exemplo/projeto"
   }
 ]
