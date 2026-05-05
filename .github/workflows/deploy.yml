@@ -2,9 +2,9 @@ name: Deploy Portfolio
 
 on:
   push:
-    branches: [ main ]
+    branches: [ mastter-a ]
   pull_request:
-    branches: [ main ]
+    branches: [ master-a ]
 
 jobs:
   build-and-deploy:
