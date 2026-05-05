@@ -2,7 +2,7 @@ name: Deploy Portfolio
 
 on:
   push:
-    branches: [ mastter-a ]
+    branches: [ master-a ]
   pull_request:
     branches: [ master-a ]
 
