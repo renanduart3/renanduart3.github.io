@@ -1,0 +1,12 @@
+[
+  {
+    "id": "proj-1",
+    "file": "projeto1.md",
+    "title": "Portal de Vendas",
+    "title_en": "Sales Portal",
+    "description": "Sistema de ecommerce para gestão de pedidos, pagamentos e integração com ERPs.",
+    "description_en": "E-commerce platform for order management, payments and ERP integrations.",
+    "tech": ["C#", "React", "Azure"],
+    "image": "/projects/portal.jpg"
+  }
+]
