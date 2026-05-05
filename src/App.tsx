@@ -253,7 +253,7 @@ export default function App() {
   const T = TRANSLATIONS[lang];
   const fallbackAvatarSrc = `https://api.dicebear.com/7.x/avataaars/svg?seed=${portfolio.profile.name || 'profile'}`;
   const uploadedPhotoSrc = `/cv-imported/profile-photo.jpg?v=${photoVersion}`;
-  const avatarSrc = useFallbackAvatar || !canUploadPhoto ? fallbackAvatarSrc : uploadedPhotoSrc;
+  const avatarSrc = useFallbackAvatar ? fallbackAvatarSrc : uploadedPhotoSrc;
 
   return (
     <div className="min-h-screen bg-brand-bg flex flex-col md:flex-row text-slate-300">
