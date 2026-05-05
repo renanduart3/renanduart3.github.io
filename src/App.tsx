@@ -35,6 +35,8 @@ import { DEFAULT_PORTFOLIO, TRANSLATIONS } from './constants';
 import { usePagination } from './hooks/usePagination';
 import { generateATSHtml, generateATSMarkdown } from './lib/cvTemplate';
 
+const canUploadPhoto = (import.meta as ImportMeta & { env: { DEV: boolean } }).env.DEV;
+
 // --- Helpers: localization, summarization and language normalization ---
 const getLocalizedField = (obj: any, field: string, lang: Language) => {
   const keyLang = `${field}_${lang}`;
@@ -156,6 +158,11 @@ export default function App() {
   };
 
   const handleProfilePhotoUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (!canUploadPhoto) {
+      event.target.value = '';
+      return;
+    }
+
     const file = event.target.files?.[0];
     if (!file) return;
 
@@ -246,16 +253,19 @@ export default function App() {
   const T = TRANSLATIONS[lang];
   const fallbackAvatarSrc = `https://api.dicebear.com/7.x/avataaars/svg?seed=${portfolio.profile.name || 'profile'}`;
   const uploadedPhotoSrc = `/cv-imported/profile-photo.jpg?v=${photoVersion}`;
+  const avatarSrc = useFallbackAvatar || !canUploadPhoto ? fallbackAvatarSrc : uploadedPhotoSrc;
 
   return (
     <div className="min-h-screen bg-brand-bg flex flex-col md:flex-row text-slate-300">
-      <input
-        ref={photoInputRef}
-        type="file"
-        accept="image/jpeg,image/png"
-        className="hidden"
-        onChange={handleProfilePhotoUpload}
-      />
+      {canUploadPhoto && (
+        <input
+          ref={photoInputRef}
+          type="file"
+          accept="image/jpeg,image/png"
+          className="hidden"
+          onChange={handleProfilePhotoUpload}
+        />
+      )}
 
       {/* Top Header Strip (Design addition) */}
       <header className="md:hidden flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-brand-bg/50 backdrop-blur-sm sticky top-0 z-50">
@@ -273,21 +283,23 @@ export default function App() {
             <div className="absolute inset-0 bg-emerald-500 rounded-2xl rotate-6 opacity-20 group-hover:rotate-12 transition-transform shadow-emerald-500/10 shadow-lg"></div>
             <div className="absolute inset-0 bg-brand-card/80 rounded-2xl border border-slate-700 overflow-hidden shadow-2xl">
               <img 
-                src={useFallbackAvatar ? fallbackAvatarSrc : uploadedPhotoSrc}
+                src={avatarSrc}
                 onError={() => setUseFallbackAvatar(true)}
                 alt="Profile" 
                 className="w-full h-full object-cover"
               />
             </div>
-            <button
-              type="button"
-              onClick={() => photoInputRef.current?.click()}
-              disabled={isUploadingPhoto}
-              className="absolute -right-2 -bottom-2 h-10 w-10 rounded-full bg-emerald-500 text-slate-950 border-2 border-brand-sidebar flex items-center justify-center shadow-lg hover:scale-105 transition-transform disabled:opacity-60"
-              title="Enviar foto (JPEG/PNG)"
-            >
-              <Upload size={16} />
-            </button>
+            {canUploadPhoto && (
+              <button
+                type="button"
+                onClick={() => photoInputRef.current?.click()}
+                disabled={isUploadingPhoto}
+                className="absolute -right-2 -bottom-2 h-10 w-10 rounded-full bg-emerald-500 text-slate-950 border-2 border-brand-sidebar flex items-center justify-center shadow-lg hover:scale-105 transition-transform disabled:opacity-60"
+                title="Enviar foto (JPEG/PNG)"
+              >
+                <Upload size={16} />
+              </button>
+            )}
           </div>
 
           <h1 className="text-2xl font-bold tracking-tight text-white mb-1 leading-tight">{getLocalizedField(portfolio.profile, 'name', lang) || portfolio.profile.name}</h1>

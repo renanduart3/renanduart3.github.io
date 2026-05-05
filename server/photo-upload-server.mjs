@@ -13,6 +13,7 @@ const outputFile = path.join(outputDir, 'profile-photo.jpg');
 
 const app = express();
 const port = process.env.PHOTO_UPLOAD_PORT || 3001;
+const isLocalDev = process.env.NODE_ENV !== 'production';
 
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -31,6 +32,11 @@ app.get('/api/health', (_req, res) => {
 });
 
 app.post('/api/profile-photo', upload.single('photo'), async (req, res) => {
+  if (!isLocalDev) {
+    res.status(403).json({ error: 'Profile photo upload is only allowed in local development.' });
+    return;
+  }
+
   try {
     if (!req.file) {
       res.status(400).json({ error: 'No photo file uploaded.' });
