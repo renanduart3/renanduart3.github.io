@@ -30,10 +30,12 @@ export const EMPTY_PORTFOLIO: PortfolioData = {
   projects: [
     {
       id: 'proj-placeholder',
+      slug: 'projeto-placeholder',
       title: 'Projeto em andamento',
       description: 'Adicione um projeto real aqui ou desative a seção no constants.ts.',
       tech: ['React', '.NET', 'Azure'],
-      image: '/projects/placeholder.jpg'
+      image: '/projects/placeholder.jpg',
+      type: 'internal'
     }
   ],
   education: [

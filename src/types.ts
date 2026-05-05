@@ -11,12 +11,17 @@ export interface Experience {
 
 export interface Project {
   id: string;
+  slug: string;
   title: string;
+  title_en?: string;
   description: string;
+  description_en?: string;
   tech: string[];
   link?: string;
   github?: string;
   image?: string;
+  type?: 'internal' | 'external';
+  content?: string; // Markdown content for internal projects
 }
 
 export interface Education {

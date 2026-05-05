@@ -214,9 +214,10 @@ export default function App() {
         if (projIndexRes && projIndexRes.ok) {
           const projIndex = await projIndexRes.json();
           const projects = await Promise.all(projIndex.map(async (p: any) => {
+            if (p.type === 'external') return { ...p };
             const mdRes = await fetch(`/projects/${p.file}`);
             const content = mdRes.ok ? await mdRes.text() : '';
-            return { id: p.id || p.file, title: p.title || p.file.replace(/\.md$/, ''), description: p.description || '', tech: p.tech || [], link: p.link, github: p.github, image: p.image, markdown: content };
+            return { id: p.id || p.file, slug: p.slug || (p.file || '').replace(/\.md$/, ''), title: p.title, title_en: p.title_en, description: p.description, description_en: p.description_en, tech: p.tech || [], link: p.link, github: p.github, image: p.image, type: p.type || 'internal', content };
           }));
           newPortfolio.projects = projects;
         }
@@ -395,6 +396,7 @@ export default function App() {
       <main className="flex-1 p-6 md:p-12 lg:p-16 max-w-6xl mx-auto w-full">
         <Routes>
           <Route path="/" element={<Home portfolio={portfolio} lang={lang} setLang={setLang} expP={expP} projP={projP} eduP={eduP} certP={certP} artP={artP} T={T} />} />
+          <Route path="/projects/:slug" element={<ProjectPage projects={portfolio.projects} T={T} lang={lang} />} />
           <Route path="/articles/:slug" element={<ArticlePage articles={portfolio.articles} T={T} lang={lang} />} />
         </Routes>
       </main>
@@ -672,7 +674,17 @@ function Home({
                   className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
                 >
                   {(projP.currentItems.length ? projP.currentItems : portfolio.projects).map((proj: Project) => (
-                    <div key={proj.id} className="relative p-5 group flex flex-col hover:-translate-y-1 transition-all overflow-hidden rounded-2xl">
+                    <Link 
+                      key={proj.id} 
+                      to={proj.type === 'external' ? '#' : `/projects/${proj.slug}`}
+                      onClick={(e) => {
+                        if (proj.type === 'external' && proj.link) {
+                          e.preventDefault();
+                          window.open(proj.link, '_blank');
+                        }
+                      }}
+                      className="relative p-5 group flex flex-col hover:-translate-y-1 transition-all overflow-hidden rounded-2xl no-underline"
+                    >
                     {/* Project Image Background */}
                     <div className="absolute inset-0 z-0 rounded-2xl overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-500 opacity-20 group-hover:opacity-40">
                       {proj.image && (
@@ -700,18 +712,18 @@ function Home({
                       </div>
                       <div className="flex gap-4 border-t border-slate-800 pt-5">
                         {proj.github && (
-                          <a href={proj.github} className="text-slate-600 hover:text-white transition-colors" title="GitHub">
+                          <a href={proj.github} onClick={(e) => e.preventDefault()} className="text-slate-600 hover:text-white transition-colors" title="GitHub">
                             <Github size={18} />
                           </a>
                         )}
                         {proj.link && (
-                          <a href={proj.link} className="text-slate-600 hover:text-white transition-colors" title="Live Demo">
-                            <ExternalLink size={18} />
+                          <a href={proj.link} onClick={(e) => e.preventDefault()} className="text-slate-600 hover:text-white transition-colors" title={proj.type === 'external' ? 'External Link' : 'View Project'}>
+                            {proj.type === 'external' ? <ExternalLink size={18} /> : <ChevronRight size={18} />}
                           </a>
                         )}
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 ))}
               </motion.div>
             </AnimatePresence>
@@ -898,6 +910,85 @@ function ArticlePage({ articles, T, lang }: { articles: Article[], T: any, lang:
           >
             {T.back}
           </button>
+      </div>
+    </div>
+  );
+}
+
+function ProjectPage({ projects, T, lang }: { projects: Project[], T: any, lang: Language }) {
+  const { slug } = useParams();
+  const navigate = useNavigate();
+  const project = projects.find(p => p.slug === slug);
+
+  if (!project) {
+    return (
+      <div className="flex flex-col items-center justify-center h-full text-center">
+        <h1 className="text-4xl font-black text-white mb-4">404</h1>
+        <p className="text-slate-400 mb-8">Project not found</p>
+        <button onClick={() => navigate('/')} className="px-6 py-3 bg-emerald-500 text-slate-950 font-bold rounded-xl">{T.back}</button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <button 
+        onClick={() => navigate('/')}
+        className="flex items-center gap-2 text-slate-500 hover:text-white transition-colors mb-12 uppercase font-bold text-xs tracking-widest"
+      >
+        <ArrowLeft size={16} /> {T.back}
+      </button>
+      
+      {project.image && (
+        <div className="mb-12 rounded-2xl overflow-hidden border border-slate-800 h-96 bg-slate-800">
+          <img 
+            src={project.image} 
+            alt={project.title}
+            className="w-full h-full object-cover"
+          />
+        </div>
+      )}
+      
+      <div className="mb-12">
+        <h1 className="text-3xl md:text-5xl font-black text-white mb-6 leading-tight tracking-tighter uppercase italic">
+          {getLocalizedField(project, 'title', lang) || project.title}
+        </h1>
+        <p className="text-lg text-slate-400 italic font-medium leading-relaxed mb-6">
+          {getLocalizedField(project, 'description', lang) || project.description}
+        </p>
+        <div className="flex flex-wrap gap-2">
+          {project.tech.map((t: string) => (
+            <span key={t} className="text-xs px-3 py-1 bg-blue-500/20 rounded-full border border-blue-500/30 text-blue-300 font-bold uppercase tracking-wider">{t}</span>
+          ))}
+        </div>
+      </div>
+
+      {project.content && (
+        <div className="prose prose-invert prose-slate max-w-none prose-p:text-slate-300 prose-headings:text-white prose-a:text-emerald-400 prose-strong:text-white mb-12">
+          <div className="markdown-body">
+            <Markdown>{getLocalizedField(project, 'content', lang) || project.content || ''}</Markdown>
+          </div>
+        </div>
+      )}
+      
+      <div className="mt-20 pt-10 border-t border-slate-800 flex gap-4">
+        {project.link && (
+          <a 
+            href={project.link} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all shadow-lg"
+          >
+            {project.github ? <Github size={18} /> : <ExternalLink size={18} />}
+            {project.github ? 'GitHub' : 'Visit Project'}
+          </a>
+        )}
+        <button 
+          onClick={() => navigate('/')}
+          className="px-6 py-3 bg-slate-100 text-slate-950 font-bold rounded-xl hover:bg-white transition-all shadow-lg"
+        >
+          {T.back}
+        </button>
       </div>
     </div>
   );
