@@ -227,7 +227,7 @@ export default function App() {
             if (a.type === 'external') return { ...a };
             const mdRes = await fetch(`/articles/${a.file}`);
             const content = mdRes.ok ? await mdRes.text() : '';
-            return { id: a.id || a.file, slug: a.slug || (a.file || '').replace(/\.md$/, ''), title: a.title, description: a.description, date: a.date, type: a.type || 'internal', link: a.url || a.link, content };
+            return { id: a.id || a.file, slug: a.slug || (a.file || '').replace(/\.md$/, ''), title: a.title, title_en: a.title_en, description: a.description, description_en: a.description_en, date: a.date, type: a.type || 'internal', link: a.link, image: a.image, content };
           }));
           newPortfolio.articles = articles;
         }
@@ -740,8 +740,17 @@ function Home({
                 {(artP.currentItems.length ? artP.currentItems : portfolio.articles).map((article: Article) => (
                    <div 
                     key={article.id} 
-                    className="p-6 bg-slate-900/40 border border-slate-800 rounded-2xl hover:border-slate-600 transition-all group flex flex-col h-full"
+                    className="p-6 bg-slate-900/40 border border-slate-800 rounded-2xl hover:border-slate-600 transition-all group flex flex-col h-full overflow-hidden"
                   >
+                    {article.image && (
+                      <div className="mb-4 -mx-6 -mt-6 h-40 bg-slate-800 overflow-hidden rounded-t-2xl">
+                        <img 
+                          src={article.image} 
+                          alt={article.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      </div>
+                    )}
                     <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3 flex items-center gap-2">
                        <BookOpen size={12} className="text-emerald-500" />
                        {article.date}
@@ -853,6 +862,16 @@ function ArticlePage({ articles, T, lang }: { articles: Article[], T: any, lang:
       >
         <ArrowLeft size={16} /> {T.back}
       </button>
+      
+      {article.image && (
+        <div className="mb-12 rounded-2xl overflow-hidden border border-slate-800 h-96 bg-slate-800">
+          <img 
+            src={article.image} 
+            alt={article.title}
+            className="w-full h-full object-cover"
+          />
+        </div>
+      )}
       
       <div className="mb-12">
         <span className="text-emerald-500 text-[10px] font-black uppercase tracking-[0.3em] mb-4 block">

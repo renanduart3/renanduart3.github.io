@@ -42,9 +42,12 @@ export interface Article {
   id: string;
   slug: string;
   title: string;
+  title_en?: string;
   description: string;
+  description_en?: string;
   date: string;
   link?: string;
+  image?: string;
   content?: string; // Markdown content or path
   type: 'internal' | 'external';
 }
