@@ -10,16 +10,20 @@
     "date": "2025-05-05T15:30:00",
     "author": "Renan Duarte",
     "type": "internal",
-    "img": "/articles/article1.jpg",
+    "image": "/articles/article1.jpg",
     "content_en": "## How to reduce cloud costs\n\nStart by right-sizing instances..."
   },
   {
     "id": "art-ext-1",
-    "title": "Test external article",
+    "slug": "external-article",
+    "title": "Exemplo de artigo externo",
+    "title_en": "Example of external article",
+    "description": "Este é um artigo hospedado em outro site, acesse via link.",
+    "description_en": "This is an article hosted on another website, access via link.",
     "date": "2025-05-01T10:10:00",
     "author": "Renan Duarte",
     "type": "external",
-    "img": "/articles/external.jpg",
-    "url": "https://www.example.com/article2"
+    "image": "/articles/external.jpg",
+    "link": "https://www.example.com/article2"
   }
 ]
