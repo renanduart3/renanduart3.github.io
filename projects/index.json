@@ -1,18 +1,5 @@
 [
   {
-    "id": "proj-1",
-    "file": "projeto1.md",
-    "slug": "projeto1",
-    "title": "Portal de Vendas",
-    "title_en": "Sales Portal",
-    "description": "Sistema de ecommerce para gestão de pedidos, pagamentos e integração com ERPs.",
-    "description_en": "E-commerce platform for order management, payments and ERP integrations.",
-    "tech": ["C#", "React", "Azure"],
-    "image": "/projects/portal.jpg",
-    "type": "internal",
-    "link": "https://github.com/renanduart3/sales-portal"
-  },
-  {
     "id": "proj-2",
     "file": "blazor-sistema-gerenciador.md",
     "slug": "blazor-sistema-gerenciador",
@@ -24,7 +11,9 @@
     "image": "https://opengraph.githubassets.com/1/renanduart3/blazor-sistema-gerenciador",
     "type": "external",
     "link": "https://github.com/renanduart3/blazor-sistema-gerenciador",
-    "github": "https://github.com/renanduart3/blazor-sistema-gerenciador"
+    "github": "https://github.com/renanduart3/blazor-sistema-gerenciador",
+    "status":"concluído",
+    "status_en":"done"
   },
   {
     "id": "proj-3",
@@ -38,7 +27,9 @@
     "image": "https://opengraph.githubassets.com/1/renanduart3/ms-build",
     "type": "external",
     "link": "https://github.com/renanduart3/ms-build",
-    "github": "https://github.com/renanduart3/ms-build"
+    "github": "https://github.com/renanduart3/ms-build",
+    "status":"concluído",
+    "status_en":"done"
   },
   {
     "id": "proj-4",
@@ -52,7 +43,9 @@
     "image": "https://opengraph.githubassets.com/1/renanduart3/wordpress-docker",
     "type": "external",
     "link": "https://github.com/renanduart3/wordpress-docker",
-    "github": "https://github.com/renanduart3/wordpress-docker"
+    "github": "https://github.com/renanduart3/wordpress-docker",
+    "status":"concluído",
+    "status_en":"done"
   },
   {
     "id": "proj-5",
@@ -66,7 +59,9 @@
     "image": "https://opengraph.githubassets.com/1/renanduart3/mega-powar",
     "type": "external",
     "link": "https://github.com/renanduart3/mega-powar",
-    "github": "https://github.com/renanduart3/mega-powar"
+    "github": "https://github.com/renanduart3/mega-powar",
+    "status":"concluído",
+    "status_en":"done"
   },
   {
     "id": "proj-6",
@@ -80,7 +75,9 @@
     "image": "https://opengraph.githubassets.com/1/renanduart3/igreja-digital-central",
     "type": "external",
     "link": "https://github.com/renanduart3/igreja-digital-central",
-    "github": "https://github.com/renanduart3/igreja-digital-central"
+    "github": "https://github.com/renanduart3/igreja-digital-central",
+    "status":"parado",
+    "status_en":"stopped"
   },
   {
     "id": "proj-7",
@@ -94,7 +91,9 @@
     "image": "https://raw.githubusercontent.com/renanduart3/EstacionaT/master/ImagesOut/UseCaseNovo.png",
     "type": "external",
     "link": "https://github.com/renanduart3/EstacionaT",
-    "github": "https://github.com/renanduart3/EstacionaT"
+    "github": "https://github.com/renanduart3/EstacionaT",
+    "status":"concluído",
+    "status_en":"done"
   },
   {
     "id": "proj-8",
@@ -108,7 +107,9 @@
     "image": "https://opengraph.githubassets.com/1/renanduart3/save-4cash",
     "type": "external",
     "link": "https://github.com/renanduart3/save-4cash",
-    "github": "https://github.com/renanduart3/save-4cash"
+    "github": "https://github.com/renanduart3/save-4cash",
+    "status":"em andamento",
+    "status_en":"in progress"
   },
   {
     "id": "proj-9",
@@ -121,8 +122,10 @@
     "tech": ["Python", "Whisper AI", "yt-dlp", "FFmpeg"],
     "image": "https://opengraph.githubassets.com/1/renanduart3/IronGrabber7-Video-Downloader-Whisper-AI",
     "type": "external",
-    "link": "https://github.com/renanduart3/IronGrabber7-Video-Downloader-Whisper-AI",
-    "github": "https://github.com/renanduart3/IronGrabber7-Video-Downloader-Whisper-AI"
+    "link": "https://renanduart3.github.io/IronGrabber7-Video-Downloader-Whisper-AI/",
+    "github": "https://github.com/renanduart3/IronGrabber7-Video-Downloader-Whisper-AI",
+    "status":"em andamento",
+    "status_en":"in progress"
   },
   {
     "id": "proj-10",
@@ -135,7 +138,9 @@
     "tech": ["React Native", "Supabase", "Fastlane", "Ruby"],
     "image": "https://opengraph.githubassets.com/1/renanduart3/venda-mobile-inteligente",
     "type": "external",
-    "link": "https://github.com/renanduart3/venda-mobile-inteligente",
-    "github": "https://github.com/renanduart3/venda-mobile-inteligente"
+    "link": "https://renanduart3.github.io/venda-mobile-inteligente/",
+    "github": "https://github.com/renanduart3/venda-mobile-inteligente",
+    "status":"em andamento",
+    "status_en":"in progress"
   }
 ]
