@@ -245,10 +245,19 @@ export default function App() {
               github: p.github,
               image: p.image,
               type: p.type || 'internal',
+              status: p.status,
+              status_en: p.status_en,
               content,
             };
           }));
-          newPortfolio.projects = projects;
+          const statusOrder = (status: string | undefined) => {
+            if (!status) return 3;
+            const lower = (status || '').toLowerCase();
+            if (lower.includes('andamento') || lower.includes('progress')) return 0;
+            if (lower.includes('concluído') || lower.includes('done')) return 1;
+            return 2;
+          };
+          newPortfolio.projects = projects.sort((a: any, b: any) => statusOrder(a.status) - statusOrder(b.status));
         }
 
         if (artIndexRes && artIndexRes.ok) {
@@ -309,7 +318,7 @@ export default function App() {
       {/* --- SIDEBAR --- */}
       <aside className="w-full md:w-80 lg:w-96 md:h-screen md:sticky top-0 md:overflow-y-auto scroll-hide bg-brand-sidebar border-r border-slate-800 p-8 flex flex-col">
         <div className="flex flex-col items-center md:items-start text-center md:text-left">
-          <div className="relative w-32 h-32 mb-8 group">
+          <div className="relative w-32 h-32 mb-6 group md:self-center">
             <div className="absolute inset-0 bg-emerald-500 rounded-2xl rotate-6 opacity-20 group-hover:rotate-12 transition-transform shadow-emerald-500/10 shadow-lg"></div>
             <div className="absolute inset-0 bg-brand-card/80 rounded-2xl border border-slate-700 overflow-hidden shadow-2xl">
               <img 
@@ -329,6 +338,30 @@ export default function App() {
               >
                 <Upload size={16} />
               </button>
+            )}
+          </div>
+
+          {/* Socials below avatar */}
+          <div className="flex flex-wrap gap-2 text-slate-400 justify-center mb-8 w-full">
+            {portfolio.profile.github && (
+              <a href={portfolio.profile.github} target="_blank" rel="noopener noreferrer" className="w-8 h-8 flex items-center justify-center bg-slate-900 border border-slate-800 rounded hover:text-white hover:border-slate-600 transition-all">
+                <Github size={14} />
+              </a>
+            )}
+            {portfolio.profile.linkedin && (
+              <a href={portfolio.profile.linkedin} target="_blank" rel="noopener noreferrer" className="w-8 h-8 flex items-center justify-center bg-blue-600/10 border border-blue-600/30 text-blue-400 rounded hover:bg-blue-600 hover:text-white transition-all">
+                <Linkedin size={14} />
+              </a>
+            )}
+            {portfolio.profile.instagram && (
+              <a href={portfolio.profile.instagram} target="_blank" rel="noopener noreferrer" className="w-8 h-8 flex items-center justify-center bg-pink-600/10 border border-pink-600/30 text-pink-400 rounded hover:bg-pink-600 hover:text-white transition-all">
+                <Instagram size={14} />
+              </a>
+            )}
+            {portfolio.profile.twitter && (
+              <a href={portfolio.profile.twitter} target="_blank" rel="noopener noreferrer" className="w-8 h-8 flex items-center justify-center bg-sky-500/10 border border-sky-500/30 text-sky-400 rounded hover:bg-sky-500 hover:text-white transition-all">
+                <Twitter size={14} />
+              </a>
             )}
           </div>
 
@@ -392,33 +425,7 @@ export default function App() {
           </div>
         </div>
 
-        <div className="mt-auto pt-8 border-t border-slate-800 space-y-4">
-           {/* Socials */}
-           <div className="flex flex-wrap gap-2 text-slate-400 justify-center">
-              {portfolio.profile.github && (
-                <a href={portfolio.profile.github} target="_blank" className="w-10 h-10 flex items-center justify-center bg-slate-900 border border-slate-800 rounded-lg hover:text-white hover:border-slate-600 transition-all">
-                  <Github size={18} />
-                </a>
-              )}
-              {portfolio.profile.linkedin && (
-                <a href={portfolio.profile.linkedin} target="_blank" className="w-10 h-10 flex items-center justify-center bg-blue-600/10 border border-blue-600/30 text-blue-400 rounded-lg hover:bg-blue-600 hover:text-white transition-all">
-                  <Linkedin size={18} />
-                </a>
-              )}
-              {portfolio.profile.instagram && (
-                <a href={portfolio.profile.instagram} target="_blank" className="w-10 h-10 flex items-center justify-center bg-pink-600/10 border border-pink-600/30 text-pink-400 rounded-lg hover:bg-pink-600 hover:text-white transition-all">
-                  <Instagram size={18} />
-                </a>
-              )}
-              {portfolio.profile.twitter && (
-                 <a href={portfolio.profile.twitter} target="_blank" className="w-10 h-10 flex items-center justify-center bg-sky-500/10 border border-sky-500/30 text-sky-400 rounded-lg hover:bg-sky-500 hover:text-white transition-all">
-                   <Twitter size={18} />
-                 </a>
-              )}
-            </div>
-          
-          <DownloadModalTrigger portfolio={portfolio} lang={lang} setPortfolio={setPortfolio} T={T} />
-        </div>
+
       </aside>
 
       {/* --- MAIN CONTENT --- */}
@@ -480,9 +487,10 @@ function DownloadModalTrigger({ portfolio, lang, T }: any) {
     <div>
       <button
         onClick={() => setOpen(true)}
-        className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-slate-100 text-slate-950 rounded-xl text-sm font-bold hover:bg-white transition-all shadow-lg"
+        className="flex items-center justify-center gap-1.5 px-3 py-1.5 bg-slate-100 text-slate-950 rounded-md text-[11px] font-bold hover:bg-white transition-all shadow-sm"
+        title="Baixar CV"
       >
-        <Download size={16} /> {T.downloadCV}
+        <Download size={14} /> CV
       </button>
 
       {open && (
@@ -511,7 +519,7 @@ function Home({
   return (
     <>
         {/* Top Controls Overlay-like */}
-        <div className="flex flex-col sm:flex-row justify-between items-center mb-16 gap-6">
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-16 gap-4">
           <div className="flex items-center space-x-6">
             <div className="flex bg-slate-900 rounded-md p-1 border border-slate-800">
               <button 
@@ -533,7 +541,9 @@ function Home({
             </div>
           </div>
 
-          <div className="flex items-center gap-4"></div>
+          <div className="flex items-center gap-2">
+            <DownloadModalTrigger portfolio={portfolio} lang={lang} T={T} />
+          </div>
         </div>
 
         {/* Sections */}
@@ -721,9 +731,16 @@ function Home({
                     </div>
 
                     <div className="relative z-10 flex flex-col h-full bg-slate-900/40 backdrop-blur-sm border border-slate-800 rounded-2xl p-5 hover:border-slate-700 transition-all">
-                      <div className="flex justify-between items-start mb-4">
-                         <h3 className="text-[15px] font-bold text-white group-hover:text-blue-400 transition-colors uppercase tracking-tight">{getLocalizedField(proj, 'title', lang) || proj.title}</h3>
-                         <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse opacity-50 shadow-[0_0_8px_#3b82f6]"></div>
+                      <div className="flex flex-col gap-2 mb-4">
+                        <div className="flex justify-between items-start gap-2">
+                          <h3 className="text-[15px] font-bold text-white group-hover:text-blue-400 transition-colors uppercase tracking-tight flex-1">{getLocalizedField(proj, 'title', lang) || proj.title}</h3>
+                          <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse opacity-50 shadow-[0_0_8px_#3b82f6] shrink-0 mt-1"></div>
+                        </div>
+                        {proj.status && (
+                          <span className={`text-[9px] font-bold px-2 py-0.5 rounded whitespace-nowrap w-fit ${(proj.status || '').toLowerCase().includes('andamento') || (proj.status || '').toLowerCase().includes('progress') ? 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/30' : (proj.status || '').toLowerCase().includes('concluído') || (proj.status || '').toLowerCase().includes('done') ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'bg-slate-500/20 text-slate-300 border border-slate-500/30'}`}>
+                            {getLocalizedField(proj, 'status', lang) || proj.status}
+                          </span>
+                        )}
                       </div>
                       <p className="text-slate-400 text-[12px] leading-relaxed mb-6 line-clamp-3 group-hover:text-slate-200 transition-colors">
                         {getLocalizedField(proj, 'description', lang) || proj.description}

@@ -22,6 +22,8 @@ export interface Project {
   image?: string;
   type?: 'internal' | 'external';
   content?: string; // Markdown content for internal projects
+  status?: string; // e.g., 'em andamento', 'concluído', 'parado'
+  status_en?: string; // e.g., 'in progress', 'done', 'stopped'
 }
 
 export interface Education {
