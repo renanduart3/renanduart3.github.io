@@ -2,9 +2,10 @@ name: Deploy Portfolio
 
 on:
   push:
-    branches: [ master-a ]
+    branches: [ master-a, main, master ]
   pull_request:
-    branches: [ master-a ]
+    branches: [ master-a, main, master ]
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:

@@ -37,6 +37,20 @@ import { generateATSHtml, generateATSMarkdown } from './lib/cvTemplate';
 
 const canUploadPhoto = (import.meta as ImportMeta & { env: { DEV: boolean } }).env.DEV;
 
+const resolvePublicPath = (path: string) => {
+  const base = (import.meta as ImportMeta & { env: { BASE_URL?: string } }).env.BASE_URL || '/';
+  const normalizedBase = base.endsWith('/') ? base : `${base}/`;
+  const normalizedPath = path.startsWith('/') ? path.slice(1) : path;
+  return `${normalizedBase}${normalizedPath}`;
+};
+
+const stripFrontmatter = (content: string) => {
+  if (!content.startsWith('---')) return content;
+  const end = content.indexOf('\n---', 3);
+  if (end === -1) return content;
+  return content.slice(end + 4).trimStart();
+};
+
 // --- Helpers: localization, summarization and language normalization ---
 const getLocalizedField = (obj: any, field: string, lang: Language) => {
   const keyLang = `${field}_${lang}`;
@@ -205,8 +219,8 @@ export default function App() {
     const loadManifests = async () => {
       try {
         const [projIndexRes, artIndexRes] = await Promise.all([
-          fetch('/projects/index.json').catch(() => null),
-          fetch('/articles/index.json').catch(() => null)
+          fetch(resolvePublicPath('projects/index.json'), { cache: 'no-store' }).catch(() => null),
+          fetch(resolvePublicPath('articles/index.json'), { cache: 'no-store' }).catch(() => null)
         ]);
 
         const newPortfolio = { ...portfolio } as any;
@@ -214,10 +228,25 @@ export default function App() {
         if (projIndexRes && projIndexRes.ok) {
           const projIndex = await projIndexRes.json();
           const projects = await Promise.all(projIndex.map(async (p: any) => {
-            if (p.type === 'external') return { ...p };
-            const mdRes = await fetch(`/projects/${p.file}`);
-            const content = mdRes.ok ? await mdRes.text() : '';
-            return { id: p.id || p.file, slug: p.slug || (p.file || '').replace(/\.md$/, ''), title: p.title, title_en: p.title_en, description: p.description, description_en: p.description_en, tech: p.tech || [], link: p.link, github: p.github, image: p.image, type: p.type || 'internal', content };
+            let content = '';
+            if (p.file) {
+              const mdRes = await fetch(resolvePublicPath(`projects/${p.file}`), { cache: 'no-store' });
+              content = mdRes.ok ? stripFrontmatter(await mdRes.text()) : '';
+            }
+            return {
+              id: p.id || p.file || p.slug,
+              slug: p.slug || (p.file || p.title || '').toLowerCase().replace(/\s+/g, '-').replace(/\.md$/, ''),
+              title: p.title,
+              title_en: p.title_en,
+              description: p.description,
+              description_en: p.description_en,
+              tech: p.tech || [],
+              link: p.link,
+              github: p.github,
+              image: p.image,
+              type: p.type || 'internal',
+              content,
+            };
           }));
           newPortfolio.projects = projects;
         }
@@ -226,8 +255,8 @@ export default function App() {
           const artIndex = await artIndexRes.json();
           const articles = await Promise.all(artIndex.map(async (a: any) => {
             if (a.type === 'external') return { ...a };
-            const mdRes = await fetch(`/articles/${a.file}`);
-            const content = mdRes.ok ? await mdRes.text() : '';
+            const mdRes = await fetch(resolvePublicPath(`articles/${a.file}`), { cache: 'no-store' });
+            const content = mdRes.ok ? stripFrontmatter(await mdRes.text()) : '';
             return { id: a.id || a.file, slug: a.slug || (a.file || '').replace(/\.md$/, ''), title: a.title, title_en: a.title_en, description: a.description, description_en: a.description_en, date: a.date, type: a.type || 'internal', link: a.link, image: a.image, content };
           }));
           newPortfolio.articles = articles;
@@ -278,7 +307,7 @@ export default function App() {
       </header>
 
       {/* --- SIDEBAR --- */}
-      <aside className="w-full md:w-80 lg:w-96 md:h-screen md:sticky top-0 bg-brand-sidebar border-r border-slate-800 p-8 flex flex-col">
+      <aside className="w-full md:w-80 lg:w-96 md:h-screen md:sticky top-0 md:overflow-y-auto scroll-hide bg-brand-sidebar border-r border-slate-800 p-8 flex flex-col">
         <div className="flex flex-col items-center md:items-start text-center md:text-left">
           <div className="relative w-32 h-32 mb-8 group">
             <div className="absolute inset-0 bg-emerald-500 rounded-2xl rotate-6 opacity-20 group-hover:rotate-12 transition-transform shadow-emerald-500/10 shadow-lg"></div>
@@ -676,13 +705,7 @@ function Home({
                   {(projP.currentItems.length ? projP.currentItems : portfolio.projects).map((proj: Project) => (
                     <Link 
                       key={proj.id} 
-                      to={proj.type === 'external' ? '#' : `/projects/${proj.slug}`}
-                      onClick={(e) => {
-                        if (proj.type === 'external' && proj.link) {
-                          e.preventDefault();
-                          window.open(proj.link, '_blank');
-                        }
-                      }}
+                      to={`/projects/${proj.slug}`}
                       className="relative p-5 group flex flex-col hover:-translate-y-1 transition-all overflow-hidden rounded-2xl no-underline"
                     >
                     {/* Project Image Background */}
@@ -712,13 +735,27 @@ function Home({
                       </div>
                       <div className="flex gap-4 border-t border-slate-800 pt-5">
                         {proj.github && (
-                          <a href={proj.github} onClick={(e) => e.preventDefault()} className="text-slate-600 hover:text-white transition-colors" title="GitHub">
+                          <a
+                            href={proj.github}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(e) => e.stopPropagation()}
+                            className="text-slate-600 hover:text-white transition-colors"
+                            title="GitHub"
+                          >
                             <Github size={18} />
                           </a>
                         )}
                         {proj.link && (
-                          <a href={proj.link} onClick={(e) => e.preventDefault()} className="text-slate-600 hover:text-white transition-colors" title={proj.type === 'external' ? 'External Link' : 'View Project'}>
-                            {proj.type === 'external' ? <ExternalLink size={18} /> : <ChevronRight size={18} />}
+                          <a
+                            href={proj.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(e) => e.stopPropagation()}
+                            className="text-slate-600 hover:text-white transition-colors"
+                            title="Publicacao"
+                          >
+                            <ExternalLink size={18} />
                           </a>
                         )}
                       </div>
@@ -970,17 +1007,33 @@ function ProjectPage({ projects, T, lang }: { projects: Project[], T: any, lang:
           </div>
         </div>
       )}
+      {!project.content && (
+        <div className="mb-12 rounded-xl border border-slate-800 bg-slate-900/40 p-5 text-slate-400 text-sm">
+          {getLocalizedField(project, 'description', lang) || project.description}
+        </div>
+      )}
       
       <div className="mt-20 pt-10 border-t border-slate-800 flex gap-4">
-        {project.link && (
+        {project.github && (
           <a 
-            href={project.link} 
+            href={project.github} 
             target="_blank" 
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all shadow-lg"
           >
-            {project.github ? <Github size={18} /> : <ExternalLink size={18} />}
-            {project.github ? 'GitHub' : 'Visit Project'}
+            <Github size={18} />
+            GitHub
+          </a>
+        )}
+        {project.link && (
+          <a
+            href={project.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition-all shadow-lg"
+          >
+            <ExternalLink size={18} />
+            Publicacao
           </a>
         )}
         <button 

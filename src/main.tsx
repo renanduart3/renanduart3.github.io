@@ -6,7 +6,7 @@ import './index.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename={(import.meta as ImportMeta & { env: { BASE_URL?: string } }).env.BASE_URL || '/'}>
       <App />
     </BrowserRouter>
   </StrictMode>,
